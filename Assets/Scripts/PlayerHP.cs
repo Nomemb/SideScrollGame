@@ -31,6 +31,10 @@ public class PlayerHP : MonoBehaviour
     }
     private void Update()
     {
+        if (currentHP <= 0)
+        {
+            player.OnDie();
+        }
         if (isInvincible)
         {
             invincibleTimer -= Time.deltaTime;
@@ -45,11 +49,6 @@ public class PlayerHP : MonoBehaviour
     public void TickDamage(float tickDamage)
     {
         currentHP -= Time.deltaTime * tickDamage;
-
-        if(currentHP <= 0)
-        {
-            player.OnDie();
-        }
     }
     public void TakeDamage(float damage)
     {
@@ -63,10 +62,6 @@ public class PlayerHP : MonoBehaviour
         currentHP -= damage;
         StopCoroutine("HitColorAnimation");
         StartCoroutine("HitColorAnimation");
-        if (currentHP  <=0)
-        {
-            player.OnDie();
-        }
     }
 
     private IEnumerator HitColorAnimation()

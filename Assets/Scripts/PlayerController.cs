@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField]
+    private string nextSceneName;
     [SerializeField]
     private int jumpMaxCount = 2; // 한번에 가능한 점프 개수
     [SerializeField]
@@ -46,7 +50,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.DrawRay(transform.position, new Vector3(0, -1, 0) * 0.2f, new Color(0, 1, 0));
         RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector3(0, -1, 0), 0.2f, LayerMask.GetMask("ground"));
-        if (isDie == true) return;
+        if (transform.position.y < -7) GetComponent<PlayerHP>().CurrentHP = 0;
         // 점프
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
@@ -89,23 +93,18 @@ public class PlayerController : MonoBehaviour
 
     public void OnDie()
     {
-        // 오브젝트 파괴
-        // 플레이어 움직이지 않게
-        Debug.Log("DIE");
+        // 플레이어 사망시 씬 전환
+        PlayerPrefs.SetInt("Score", score);
+        SceneManager.LoadScene(nextSceneName);
         Destroy(gameObject);
-        isDie = true;
     }
 
-    public void OnDieEvent()
-    {
-        // 점수 저장
-        // 씬 이동
-    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.name == "TilemapTiles")
+        if (collision.gameObject.CompareTag("Ground"))
         {
             jumpCurrentCount = jumpMaxCount;
         }
     }
+
 }

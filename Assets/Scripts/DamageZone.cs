@@ -12,7 +12,6 @@ public class DamageZone : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             collision.GetComponent<PlayerHP>().TakeDamage(damage);
-
         }
     }
 }
